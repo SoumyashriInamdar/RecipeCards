@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Recipe Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+.page-header {
+    background-color: green;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+.page-title {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+.recipe-cards {
+    padding: 0 20px;
+}
+
+
+
+        .recipe-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+        .recipe-image {
+            width: 500px;
+            height: 500px;
+            object-fit: cover;
+        }
+        .recipe-content {
+            padding: 20px;
+        }
+        .recipe-title {
+            font-size: 24px;
+            margin-top: 0;
+        }
+        .prep-time {
+            font-style: italic;
+            color: #666;
+        }
+        .toggle-btn, .next-btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .toggle-btn:hover, .next-btn:hover {
+            background-color: #45a049;
+        }
+        .next-btn {
+            background-color: #008CBA;
+        }
+        .next-btn:hover {
+            background-color: #007B9A;
+        }
+        .next-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .ingredients, .steps {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        .ingredients.show, .steps.show {
+            max-height: 1000px;
+        }
+        .ingredient, .step {
+            padding: 5px 0;
+            transition: transform 0.3s ease;
+        }
+        .ingredient:hover, .step:hover {
+            transform: translateX(10px);
+        }
+        .step.active {
+            background-color: #e6ffe6;
+            font-weight: bold;
+        }
+        .progress-bar {
+            width: 0;
+            height: 5px;
+            background-color: #4CAF50;
+            transition: width 0.5s ease;
+        }
+        @media (min-width: 768px) {
+            .recipe-cards {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .recipe-card {
+                width: calc(50% - 10px);
+            }
+        }
+        @media (min-width: 1024px) {
+            .recipe-card {
+                width: calc(33.33% - 10px);
+            }
+        }
+    </style>
+</head>
+
+<header class="page-header">
+        <h1 class="page-title">Recipe Cards</h1>
+    </header>
+
+
+<body>
+    <div class="recipe-cards">
+        <!-- Recipe 1: Spaghetti Carbonara -->
+        <div class="recipe-card">
+            <img src="https://www.twopeasandtheirpod.com/wp-content/uploads/2023/01/Spaghetti-Carbonara168787.jpg" alt="Spaghetti Carbonara" class="recipe-image">
+            <div class="recipe-content">
+                <h2 class="recipe-title">Spaghetti Carbonara</h2>
+                <p class="prep-time">Preparation time: 30 minutes</p>
+                <button class="toggle-btn" onclick="toggleSection(this, 'ingredients')">Show Ingredients</button>
+                <ul class="ingredients">
+                    <li class="ingredient">400g spaghetti</li>
+                    <li class="ingredient">200g pancetta</li>
+                    <li class="ingredient">4 large eggs</li>
+                    <li class="ingredient">100g Pecorino cheese</li>
+                    <li class="ingredient">50g Parmesan cheese</li>
+                    <li class="ingredient">Black pepper</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleSection(this, 'steps')">Show Steps</button>
+                <ol class="steps">
+                    <li class="step">Cook spaghetti in salted water.</li>
+                    <li class="step">Fry pancetta until crispy.</li>
+                    <li class="step">Beat eggs with grated cheese and pepper.</li>
+                    <li class="step">Mix pasta with pancetta and egg mixture.</li>
+                    <li class="step">Serve immediately with extra cheese.</li>
+                </ol>
+                <button class="toggle-btn" onclick="startCooking(this)">Start Cooking</button>
+                <button class="next-btn" onclick="nextStep(this)" disabled>Next Step</button>
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Recipe 2: Chicken Tikka Masala -->
+        <div class="recipe-card">
+            <img src="https://thishealthytable.com/wp-content/uploads/2021/06/chicken-tikka-masala-7-of-8.jpg" alt="Chicken Tikka Masala" class="recipe-image">
+            <div class="recipe-content">
+                <h2 class="recipe-title">Chicken Tikka Masala</h2>
+                <p class="prep-time">Preparation time: 45 minutes</p>
+                <button class="toggle-btn" onclick="toggleSection(this, 'ingredients')">Show Ingredients</button>
+                <ul class="ingredients">
+                    <li class="ingredient">500g chicken breast</li>
+                    <li class="ingredient">1 cup yogurt</li>
+                    <li class="ingredient">2 tbsp lemon juice</li>
+                    <li class="ingredient">2 tsp ground cumin</li>
+                    <li class="ingredient">2 tsp paprika</li>
+                    <li class="ingredient">1 can tomato sauce</li>
+                    <li class="ingredient">1 cup heavy cream</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleSection(this, 'steps')">Show Steps</button>
+                <ol class="steps">
+                    <li class="step">Marinate chicken in yogurt and spices.</li>
+                    <li class="step">Grill chicken until charred.</li>
+                    <li class="step">Simmer tomato sauce with spices.</li>
+                    <li class="step">Add grilled chicken to the sauce.</li>
+                    <li class="step">Stir in cream and simmer until thick.</li>
+                </ol>
+                <button class="toggle-btn" onclick="startCooking(this)">Start Cooking</button>
+                <button class="next-btn" onclick="nextStep(this)" disabled>Next Step</button>
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Recipe 3: Caesar Salad -->
+        <div class="recipe-card">
+            <img src="https://www.jessicagavin.com/wp-content/uploads/2019/07/caesar-salad-9.jpg" alt="Caesar Salad" class="recipe-image">
+            <div class="recipe-content">
+                <h2 class="recipe-title">Caesar Salad</h2>
+                <p class="prep-time">Preparation time: 20 minutes</p>
+                <button class="toggle-btn" onclick="toggleSection(this, 'ingredients')">Show Ingredients</button>
+                <ul class="ingredients">
+                    <li class="ingredient">1 large romaine lettuce</li>
+                    <li class="ingredient">1/2 cup Parmesan cheese</li>
+                    <li class="ingredient">1 cup croutons</li>
+                    <li class="ingredient">2 cloves garlic</li>
+                    <li class="ingredient">2 tbsp lemon juice</li>
+                    <li class="ingredient">1 tsp Dijon mustard</li>
+                    <li class="ingredient">1/2 cup olive oil</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleSection(this, 'steps')">Show Steps</button>
+                <ol class="steps">
+                    <li class="step">Wash and chop lettuce.</li>
+                    <li class="step">Make dressing with garlic, lemon, mustard, and oil.</li>
+                    <li class="step">Toss lettuce with dressing.</li>
+                    <li class="step">Add croutons and cheese.</li>
+                    <li class="step">Serve immediately.</li>
+                </ol>
+                <button class="toggle-btn" onclick="startCooking(this)">Start Cooking</button>
+                <button class="next-btn" onclick="nextStep(this)" disabled>Next Step</button>
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Recipe 4: Chocolate Chip Cookies -->
+        <div class="recipe-card">
+            <img src="https://www.spendwithpennies.com/wp-content/uploads/2022/04/Chocolate-Chip-Cookies-SpendWithPennies-2.jpg" alt="Chocolate Chip Cookies" class="recipe-image">
+            <div class="recipe-content">
+                <h2 class="recipe-title">Chocolate Chip Cookies</h2>
+                <p class="prep-time">Preparation time: 25 minutes</p>
+                <button class="toggle-btn" onclick="toggleSection(this, 'ingredients')">Show Ingredients</button>
+                <ul class="ingredients">
+                    <li class="ingredient">2 1/4 cups all-purpose flour</li>
+                    <li class="ingredient">1 tsp baking soda</li>
+                    <li class="ingredient">1 cup butter, softened</li>
+                    <li class="ingredient">3/4 cup granulated sugar</li>
+                    <li class="ingredient">3/4 cup brown sugar</li>
+                    <li class="ingredient">2 large eggs</li>
+                    <li class="ingredient">2 cups chocolate chips</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleSection(this, 'steps')">Show Steps</button>
+                <ol class="steps">
+                    <li class="step">Preheat oven to 375°F (190°C).</li>
+                    <li class="step">Mix flour and baking soda.</li>
+                    <li class="step">Cream butter and sugars, then add eggs.</li>
+                    <li class="step">Gradually blend in flour mixture.</li>
+                    <li class="step">Stir in chocolate chips.</li>
+                    <li class="step">Drop spoonfuls onto baking sheets.</li>
+                    <li class="step">Bake for 9 to 11 minutes.</li>
+                </ol>
+                <button class="toggle-btn" onclick="startCooking(this)">Start Cooking</button>
+                <button class="next-btn" onclick="nextStep(this)" disabled>Next Step</button>
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Recipe 5: Vegetable Stir Fry -->
+        <div class="recipe-card">
+            <img src="https://i.pinimg.com/originals/ad/93/6c/ad936c5b7bd63ad5fe69e5cdf8026875.jpg" alt="Vegetable Stir Fry" class="recipe-image">
+            <div class="recipe-content">
+                <h2 class="recipe-title">Vegetable Stir Fry</h2>
+                <p class="prep-time">Preparation time: 20 minutes</p>
+                <button class="toggle-btn" onclick="toggleSection(this, 'ingredients')">Show Ingredients</button>
+                <ul class="ingredients">
+                    <li class="ingredient">2 cups mixed vegetables</li>
+                    <li class="ingredient">2 tbsp vegetable oil</li>
+                    <li class="ingredient">2 cloves garlic, minced</li>
+                    <li class="ingredient">1 tbsp ginger, grated</li>
+                    <li class="ingredient">3 tbsp soy sauce</li>
+                    <li class="ingredient">1 tbsp sesame oil</li>
+                    <li class="ingredient">2 cups cooked rice</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleSection(this, 'steps')">Show Steps</button>
+                <ol class="steps">
+                    <li class="step">Heat oil in a wok or large skillet.</li>
+                    <li class="step">Add garlic and ginger, stir-fry for 30 seconds.</li>
+                    <li class="step">Add vegetables, stir-fry until crisp-tender.</li>
+                    <li class="step">Add soy sauce and sesame oil.</li>
+                    <li class="step">Serve over cooked rice.</li>
+                </ol>
+                <button class="toggle-btn" onclick="startCooking(this)">Start Cooking</button>
+                <button class="next-btn" onclick="nextStep(this)" disabled>Next Step</button>
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+ <script>
+        function toggleSection(button, sectionClass) {
+            const section = button.nextElementSibling;
+            section.classList.toggle('show');
+            button.textContent = section.classList.contains('show') ? 
+                `Hide ${sectionClass.charAt(0).toUpperCase() + sectionClass.slice(1)}` : 
+                `Show ${sectionClass.charAt(0).toUpperCase() + sectionClass.slice(1)}`;
+        }
+
+        function startCooking(button) {
+            const recipeCard = button.closest('.recipe-card');
+            const steps = recipeCard.querySelector('.steps');
+            const progressBar = recipeCard.querySelector('.progress-bar');
+            const nextButton = recipeCard.querySelector('.next-btn');
+
+            if (button.textContent === 'Start Cooking') {
+                button.textContent = 'Reset';
+                steps.classList.add('show');
+                nextButton.disabled = false;
+                highlightStep(recipeCard, 0);
+            } else {
+                button.textContent = 'Start Cooking';
+                nextButton.disabled = true;
+                resetCooking(recipeCard);
+            }
+        }
+
+        function nextStep(button) {
+            const recipeCard = button.closest('.recipe-card');
+            const steps = recipeCard.querySelectorAll('.step');
+            const currentStep = recipeCard.querySelector('.step.active');
+            const currentStepIndex = Array.from(steps).indexOf(currentStep);
+            const nextStepIndex = currentStepIndex + 1;
+
+            if (nextStepIndex < steps.length) {
+                highlightStep(recipeCard, nextStepIndex);
+            } else {
+                button.disabled = true;
+            }
+        }
+
+        function highlightStep(recipeCard, stepIndex) {
+            const steps = recipeCard.querySelectorAll('.step');
+            const progressBar = recipeCard.querySelector('.progress-bar');
+
+            steps.forEach((step, index) => {
+                if (index === stepIndex) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+
+            progressBar.style.width = `${((stepIndex + 1) / steps.length) * 100}%`;
+        }
+
+        function resetCooking(recipeCard) {
+            const steps = recipeCard.querySelectorAll('.step');
+            const progressBar = recipeCard.querySelector('.progress-bar');
+
+            steps.forEach(step => step.classList.remove('active'));
+            progressBar.style.width = '0%';
+        }
+    </script>
+</body>
+</html>
